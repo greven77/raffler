@@ -24,7 +24,7 @@ Raffler.Views.EntriesIndex = Backbone.View.extend({
   },
 
   appendEntry: function(entry) {
-  	view = new Raffler.Views.Entry();
+  	view = new Raffler.Views.Entry({model: entry});
   	this.$('#entries').append(view.render().el, this);
   },
 
@@ -37,18 +37,21 @@ Raffler.Views.EntriesIndex = Backbone.View.extend({
   			success: function(){
   				$('#new_entry')[0].reset();
   			},
-  			error: this.handleError()	
+  			error: this.handleError
 		});
   },
 
   handleError: function(entry, response){
   	if (response.status == 422){
+      console.log("response " + response.responseText);
   		errors = $.parseJSON(response.responseText).errors;
-  		errors.forEach(function(attribute, messages){
-  			messages.forEach(function(message){
-  				alert(attribute + " " + message)
-  			});
-  		});
+      console.log("this is " + errors);
+      for (attribute in errors){
+        messages = errors[attribute];
+        messages.forEach(function(message){
+          alert(attribute + " " + message)
+        });
+      }
   	}
   }	
 
